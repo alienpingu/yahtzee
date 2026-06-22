@@ -1,28 +1,30 @@
+'use client';
+
+import styles from './AboutScreen.module.css';
+import { btnGhost, glassCard, screen, titleGradient } from './ui.module.css';
+
 export default function AboutScreen({ onBack }) {
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>About</h1>
+    <div className={screen}>
+      <h1 className={`${styles.title} ${titleGradient}`}>About</h1>
 
-      <p>
-        Yatze is a classic dice game where you roll 5 dice and try to fill in
-        scoring categories for the highest possible total.
-      </p>
+      <div className={`${styles.card} ${glassCard}`}>
+        <p className={styles.text}>
+          Yatzy is a classic dice game where you roll 5 dice and try to fill
+          in scoring categories for the highest possible total.
+        </p>
+        <p className={styles.text}>
+          This version supports <strong>single-player</strong> practice,
+          <strong> real-time multiplayer</strong> with room codes, and
+          <strong> hot-seat</strong> pass-and-play for 2–4 players on one device.
+        </p>
+        <p className={styles.text}>
+          Built with Next.js, Three.js for 3D dice, and a Node.js WebSocket
+          server with SQLite persistence. Game state is saved automatically.
+        </p>
+      </div>
 
-      <p>
-        This version supports both single-player practice and real-time
-        multiplayer for 2 to 4 players. It is built with Next.js on the
-        frontend, a Node.js WebSocket server for game logic and real-time
-        communication, and SQLite for data persistence.
-      </p>
-
-      <p>
-        Game state is saved automatically, so you can refresh the page and
-        resume your game where you left off.
-      </p>
-
-      <button onClick={onBack} style={{ padding: '10px 20px', marginTop: '20px' }}>
-        Back
-      </button>
+      <button className={btnGhost} onClick={onBack}>Back</button>
     </div>
   );
 }

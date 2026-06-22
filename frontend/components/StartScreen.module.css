@@ -1,0 +1,53 @@
+.hero {
+  text-align: center;
+  margin-bottom: 40px;
+  animation: floatUp 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.diceEmoji {
+  font-size: 64px;
+  margin-bottom: 8px;
+  animation: spinIn 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.title {
+  font-size: clamp(56px, 14vw, 96px);
+  font-weight: 700;
+  letter-spacing: -2px;
+  line-height: 1;
+  margin: 0;
+}
+
+.subtitle {
+  color: #B8B3D9;
+  font-size: 18px;
+  margin-top: 8px;
+  font-weight: 400;
+}
+
+.welcome {
+  color: #B8B3D9;
+  font-size: 18px;
+  margin-bottom: 24px;
+}
+.welcome strong { color: #F5F3FF; }
+
+.nameRow {
+  padding: 8px;
+  margin-bottom: 24px;
+  width: 100%;
+  max-width: 320px;
+  animation: floatUp 250ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.secondaryActions {
+  display: flex;
+  gap: 12px;
+}

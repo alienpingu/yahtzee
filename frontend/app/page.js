@@ -5,7 +5,7 @@ import StartScreen from '../components/StartScreen';
 import RulesScreen from '../components/RulesScreen';
 import AboutScreen from '../components/AboutScreen';
 import Lobby from '../components/Lobby';
-import Game from '../components/Game';
+import GameScreen from '../components/GameScreen';
 import { GameProvider, useGame } from '../lib/gameProvider';
 
 function HomeInner() {
@@ -42,7 +42,7 @@ function HomeInner() {
     }
     if (gameState && (gameState.status === 'in_progress' || gameState.status === 'completed')) {
       return (
-        <Game
+        <GameScreen
           gameState={gameState}
           player={player}
           mode={mode}

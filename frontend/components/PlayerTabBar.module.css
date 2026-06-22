@@ -1,0 +1,77 @@
+.bar {
+  padding: 0 12px 12px;
+  position: relative;
+  z-index: 20;
+}
+
+.scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 4px 4px 8px;
+}
+.scroll::-webkit-scrollbar { display: none; }
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px 8px 8px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 200ms, border-color 200ms, transform 150ms;
+  position: relative;
+}
+.tab:hover { background: rgba(255, 255, 255, 0.12); transform: translateY(-1px); }
+
+.tabActive {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.tabTurn {
+  border-color: var(--hue);
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #fff;
+  font-size: 14px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.turnDot {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #34D399;
+  border: 2px solid #0F0B2E;
+  animation: pulseGlow 1.5s ease-in-out infinite;
+}
+
+.info { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; }
+.name { font-size: 13px; font-weight: 600; color: #F5F3FF; display: flex; align-items: center; gap: 6px; }
+.youTag {
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(52, 211, 153, 0.2);
+  color: #34D399;
+  font-weight: 600;
+}
+.score { font-size: 11px; color: #7C7799; }

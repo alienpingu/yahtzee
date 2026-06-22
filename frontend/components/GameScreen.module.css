@@ -1,0 +1,103 @@
+.screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.connecting {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: #B8B3D9;
+}
+
+.turnBanner {
+  position: fixed;
+  bottom: 160px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px 8px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #F5F3FF;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 15;
+  animation: floatUp 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.turnAvatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #fff;
+  font-size: 12px;
+}
+
+.errorFloating {
+  position: fixed;
+  bottom: 140px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 35;
+  animation: floatUp 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gameOverOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 11, 46, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 20px;
+  animation: floatUp 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gameOverCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 36px 40px;
+  max-width: 420px;
+  width: 100%;
+}
+.gameOverEmoji { font-size: 56px; animation: spinIn 500ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+.gameOverTitle { font-size: 36px; font-weight: 700; letter-spacing: -1px; }
+.gameOverWinner { color: #B8B3D9; font-size: 16px; }
+
+.gameOverRankings {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  margin: 8px 0 16px;
+}
+.rankRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+}
+.rankNum {
+  font-size: 16px;
+  font-weight: 700;
+  color: #7C7799;
+  min-width: 20px;
+}
+.rankName { flex: 1; font-size: 15px; color: #F5F3FF; font-weight: 500; }
+.rankScore { font-size: 18px; font-weight: 700; color: #FCD34D; }

@@ -66,9 +66,25 @@ input {
   border-radius: 999px;
 }
 
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 var(--hue-soft, rgba(124, 58, 237, 0.6)); }
+  50% { box-shadow: 0 0 20px 4px var(--hue-soft, rgba(124, 58, 237, 0.6)); }
+}
+
+@keyframes floatUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spinIn {
+  from { opacity: 0; transform: scale(0.8) rotate(-4deg); }
+  to { opacity: 1; transform: scale(1) rotate(0); }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }

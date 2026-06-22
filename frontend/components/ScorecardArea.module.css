@@ -1,0 +1,107 @@
+.area {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 16px 200px;
+  max-width: 640px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.activeCard {
+  padding: 20px;
+  animation: floatUp 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.activeHeader { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+.activeAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #fff;
+  font-size: 16px;
+}
+.activeInfo { display: flex; flex-direction: column; }
+.activeName { font-size: 17px; font-weight: 600; color: #F5F3FF; }
+.activeTotal { font-size: 13px; color: #7C7799; }
+
+.sections { display: flex; flex-direction: column; gap: 16px; }
+
+.section { display: flex; flex-direction: column; gap: 6px; }
+.sectionLabel {
+  font-size: 11px;
+  color: #7C7799;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+}
+
+.catList { display: flex; flex-direction: column; gap: 4px; }
+
+.catRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid transparent;
+  cursor: default;
+  transition: background 150ms, border-color 150ms, transform 100ms;
+  text-align: left;
+  width: 100%;
+}
+.catLabel { font-size: 14px; color: #B8B3D9; font-weight: 500; }
+.catValue { font-size: 14px; font-weight: 700; color: #7C7799; min-width: 30px; text-align: right; }
+
+.catScored { background: rgba(255, 255, 255, 0.08); }
+.catScored .catValue { color: #F5F3FF; }
+.catScored .catLabel { color: #F5F3FF; }
+
+.catInteractive {
+  cursor: pointer;
+  background: rgba(124, 58, 237, 0.12);
+  border-color: rgba(124, 58, 237, 0.3);
+}
+.catInteractive:hover {
+  background: rgba(124, 58, 237, 0.22);
+  border-color: rgba(124, 58, 237, 0.5);
+  transform: translateX(2px);
+}
+
+.catPreviewGood .catValue { color: #34D399; }
+.catPreviewZero .catValue { color: #7C7799; }
+
+.opponents { display: flex; flex-direction: column; gap: 8px; }
+
+.oppCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  animation: floatUp 300ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+.oppCard:nth-child(1) { animation-delay: 50ms; }
+.oppCard:nth-child(2) { animation-delay: 100ms; }
+.oppCard:nth-child(3) { animation-delay: 150ms; }
+
+.oppAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #fff;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.oppInfo { display: flex; flex-direction: column; flex: 1; }
+.oppName { font-size: 14px; font-weight: 500; color: #F5F3FF; }
+.oppProgress { font-size: 12px; color: #7C7799; }
+.oppScore { font-size: 20px; font-weight: 700; }

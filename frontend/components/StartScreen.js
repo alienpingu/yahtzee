@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import styles from './StartScreen.module.css';
+import { btnPrimary, btnGhost, glassCard, input, titleGradient, screen, error as errStyle } from './ui.module.css';
 
 export default function StartScreen({ player, onPlay, onRules, onAbout, onIdentify }) {
   const [name, setName] = useState('');
@@ -25,36 +27,41 @@ export default function StartScreen({ player, onPlay, onRules, onAbout, onIdenti
   };
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>Yatze Game</h1>
+    <div className={screen}>
+      <div className={styles.hero}>
+        <div className={styles.diceEmoji}>🎲</div>
+        <h1 className={`${styles.title} ${titleGradient}`}>Yatzy</h1>
+        <p className={styles.subtitle}>Roll. Score. Celebrate.</p>
+      </div>
 
-      {player && <p>Welcome, {player.name}!</p>}
+      {player && (
+        <p className={styles.welcome}>Welcome back, <strong>{player.name}</strong>!</p>
+      )}
 
       {asking && !player && (
-        <div style={{ margin: '20px 0' }}>
+        <div className={`${styles.nameRow} ${glassCard}`}>
           <input
             type="text"
+            className={input}
             placeholder="Enter your name"
             value={name}
+            autoFocus
             onChange={(e) => setName(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter') handlePlay(); }}
-            style={{ padding: '10px', fontSize: '16px', marginRight: '10px', width: '200px' }}
           />
         </div>
       )}
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p className={errStyle}>{error}</p>}
 
-      <div>
-        <button onClick={handlePlay} disabled={loading} style={{ padding: '10px 20px', margin: '5px' }}>
+      <div className={styles.actions}>
+        <button className={btnPrimary} onClick={handlePlay} disabled={loading}>
           {loading ? 'Loading...' : asking && !player ? 'Submit' : 'Play'}
         </button>
-        <button onClick={onRules} style={{ padding: '10px 20px', margin: '5px' }}>
-          Rules
-        </button>
-        <button onClick={onAbout} style={{ padding: '10px 20px', margin: '5px' }}>
-          About
-        </button>
+        <div className={styles.secondaryActions}>
+          <button className={btnGhost} onClick={onRules}>Rules</button>
+          <button className={btnGhost} onClick={onAbout}>About</button>
+        </div>
       </div>
     </div>
   );
