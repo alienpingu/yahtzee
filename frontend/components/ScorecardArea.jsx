@@ -6,14 +6,11 @@ import { useUiStore } from '../lib/store';
 import styles from './ScorecardArea.module.css';
 import { glassCard } from './ui.module.css';
 
-export default function ScorecardArea({ gameState, viewerPlayerId, isMyTurn, mode, onScore }) {
+export default function ScorecardArea({ gameState, viewerPlayerId, canScore, diceRolled, onScore }) {
   const { activeTabId } = useUiStore();
 
   const activePlayer = gameState.players.find((p) => p.playerId === activeTabId) || gameState.players[0];
   const opponents = gameState.players.filter((p) => p.playerId !== activePlayer?.playerId);
-
-  const canScore = isMyTurn && gameState.rollsLeft < 3 && gameState.status === 'in_progress';
-  const diceRolled = !gameState.dice.every((d) => d === 0);
 
   return (
     <div className={styles.area}>

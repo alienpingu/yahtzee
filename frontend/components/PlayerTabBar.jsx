@@ -12,13 +12,6 @@ export default function PlayerTabBar({ gameState, viewerPlayerId }) {
   const activeTurnId = gameState.currentTurnPlayerId;
 
   useEffect(() => {
-    if (activeTabId == null && gameState.players.length > 0) {
-      const viewer = gameState.players.find((p) => p.playerId === viewerPlayerId);
-      setActiveTab(viewer ? viewer.playerId : gameState.players[0].playerId);
-    }
-  }, [gameState.players, viewerPlayerId, activeTabId, setActiveTab]);
-
-  useEffect(() => {
     const ref = tabRefs.current[activeTurnId];
     if (ref) ref.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
   }, [activeTurnId]);

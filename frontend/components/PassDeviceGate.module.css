@@ -1,0 +1,65 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 11, 46, 0.96);
+  backdrop-filter: blur(12px);
+  padding: 20px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 40px 48px;
+  max-width: 360px;
+  width: 100%;
+}
+
+.emoji {
+  font-size: 52px;
+  margin-bottom: 4px;
+}
+
+.label {
+  color: #B8B3D9;
+  font-size: 15px;
+  margin: 0;
+}
+
+.playerRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 8px 0 20px;
+}
+
+.avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #fff;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.name {
+  font-size: 26px;
+  font-weight: 700;
+  color: #F5F3FF;
+  letter-spacing: -0.5px;
+}
+
+.readyBtn {
+  min-width: 200px;
+  font-size: 17px !important;
+  padding: 14px 36px !important;
+}

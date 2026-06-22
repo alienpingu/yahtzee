@@ -27,15 +27,12 @@ export default function Die3D({ value, index, isKept, canKeep, onToggleKeep, red
   const materials = useMemo(() => {
     return FACE_MATERIAL_ORDER.map((faceVal) => {
       const tex = getFaceTexture(faceVal);
-      return new THREE.MeshPhysicalMaterial({
+      return new THREE.MeshStandardMaterial({
         map: tex,
-        roughness: 0.25,
+        roughness: 0.4,
         metalness: 0.0,
-        clearcoat: 1.0,
-        clearcoatRoughness: 0.15,
-        reflectivity: 0.5,
         emissive: new THREE.Color(0x000000),
-        emissiveIntensity: 0.8,
+        emissiveIntensity: 0.6,
       });
     });
   }, []);
@@ -117,6 +114,7 @@ export default function Die3D({ value, index, isKept, canKeep, onToggleKeep, red
     <mesh
       ref={meshRef}
       position={[(index - 2) * DICE_SPACING, 0, 0]}
+      material={materials}
       onClick={(e) => {
         e.stopPropagation();
         if (canKeep) onToggleKeep(index);
@@ -128,9 +126,6 @@ export default function Die3D({ value, index, isKept, canKeep, onToggleKeep, red
       onPointerOut={() => setHovered(false)}
     >
       <boxGeometry args={[DICE_SIZE, DICE_SIZE, DICE_SIZE]} />
-      {materials.map((mat, i) => (
-        <primitive key={i} object={mat} attach={`material-${i}`} />
-      ))}
     </mesh>
   );
 }

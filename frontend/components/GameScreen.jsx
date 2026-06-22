@@ -5,6 +5,9 @@ import GameTopBar from './GameTopBar';
 import PlayerTabBar from './PlayerTabBar';
 import ScorecardArea from './ScorecardArea';
 import DiceStage from './DiceStage';
+import PassDeviceGate from './PassDeviceGate';
+import { useAutofocus } from '../lib/useAutofocus';
+import { useTurnPhase } from '../lib/useTurnPhase';
 import { hueFor } from '../lib/tokens';
 import styles from './GameScreen.module.css';
 import { glassCard, btnPrimary, titleGradient, error as errStyle } from './ui.module.css';
@@ -12,16 +15,20 @@ import { glassCard, btnPrimary, titleGradient, error as errStyle } from './ui.mo
 export default function GameScreen({ gameState, player, mode, onRoll, onScore, onLeave, error }) {
   const [kept, setKept] = useState([]);
 
+  const isMyTurn = mode === 'hotseat' || gameState?.currentTurnPlayerId === player?.id;
+  const turnPhase = useTurnPhase(gameState, isMyTurn);
+  useAutofocus(gameState, mode);
+
   useEffect(() => {
     if (gameState && gameState.rollsLeft === 3) setKept([]);
   }, [gameState?.rollsLeft]);
 
   if (!gameState) return <div className={styles.connecting}>Connecting...</div>;
 
-  const isMyTurn = mode === 'hotseat' || gameState.currentTurnPlayerId === player?.id;
   const gameComplete = gameState.status === 'completed';
   const currentTurnPlayer = gameState.players.find((p) => p.playerId === gameState.currentTurnPlayerId);
   const winner = gameState.players.find((p) => p.playerId === gameState.winnerPlayerId);
+  const viewerPlayerId = mode === 'hotseat' ? currentTurnPlayer?.playerId : player?.id;
 
   const toggleKeep = (index) => {
     setKept((prev) => prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]);
@@ -40,19 +47,21 @@ export default function GameScreen({ gameState, player, mode, onRoll, onScore, o
     <div className={styles.screen}>
       <GameTopBar gameState={gameState} onLeave={onLeave} />
 
-      <PlayerTabBar gameState={gameState} viewerPlayerId={mode === 'hotseat' ? currentTurnPlayer?.playerId : player?.id} />
+      <PlayerTabBar gameState={gameState} viewerPlayerId={viewerPlayerId} />
 
       <ScorecardArea
         gameState={gameState}
-        viewerPlayerId={mode === 'hotseat' ? currentTurnPlayer?.playerId : player?.id}
-        isMyTurn={isMyTurn}
-        mode={mode}
+        viewerPlayerId={viewerPlayerId}
+        canScore={turnPhase.canScore}
+        diceRolled={turnPhase.diceRolled}
         onScore={handleScore}
       />
 
       <DiceStage
         gameState={gameState}
-        isMyTurn={isMyTurn}
+        canRoll={turnPhase.canRoll}
+        canKeep={turnPhase.canKeep}
+        rollLabel={turnPhase.rollLabel}
         kept={kept}
         onToggleKeep={toggleKeep}
         onRoll={handleRoll}
@@ -69,6 +78,8 @@ export default function GameScreen({ gameState, player, mode, onRoll, onScore, o
       )}
 
       {error && <p className={`${styles.errorFloating} ${errStyle}`}>{error}</p>}
+
+      <PassDeviceGate gameState={gameState} />
 
       {gameComplete && (
         <div className={styles.gameOverOverlay}>

@@ -12,13 +12,11 @@ const DiceCanvas = dynamic(() => import('./dice/DiceCanvas'), {
   loading: () => <div className={styles.canvasLoading}>Loading dice...</div>,
 });
 
-export default function DiceStage({ gameState, isMyTurn, kept, onToggleKeep, onRoll, currentTurnPlayer }) {
+export default function DiceStage({ gameState, canRoll, canKeep, rollLabel, kept, onToggleKeep, onRoll, currentTurnPlayer }) {
   const { reduceMotion } = useSettings();
   const [pendingRoll, setPendingRoll] = useState(false);
   const prevRollsLeft = useRef(gameState.rollsLeft);
 
-  const canRoll = isMyTurn && gameState.rollsLeft > 0 && gameState.status === 'in_progress';
-  const canKeep = isMyTurn && gameState.rollsLeft < 3 && gameState.rollsLeft > 0 && gameState.status === 'in_progress';
   const hueColor = hueFor(currentTurnPlayer).main;
 
   useEffect(() => {
@@ -34,11 +32,7 @@ export default function DiceStage({ gameState, isMyTurn, kept, onToggleKeep, onR
     setTimeout(() => setPendingRoll(false), 3000);
   };
 
-  const rollLabel = pendingRoll
-    ? 'Rolling...'
-    : gameState.rollsLeft === 3
-      ? 'Roll Dice'
-      : `Roll (${gameState.rollsLeft} left)`;
+  const displayLabel = pendingRoll ? 'Rolling...' : rollLabel;
 
   return (
     <div className={styles.stage}>
@@ -59,7 +53,7 @@ export default function DiceStage({ gameState, isMyTurn, kept, onToggleKeep, onR
         onClick={handleRoll}
         disabled={!canRoll || pendingRoll}
       >
-        {rollLabel}
+        {displayLabel}
       </button>
     </div>
   );
