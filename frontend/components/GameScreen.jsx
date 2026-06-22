@@ -56,6 +56,7 @@ export default function GameScreen({ gameState, player, mode, onRoll, onScore, o
         kept={kept}
         onToggleKeep={toggleKeep}
         onRoll={handleRoll}
+        currentTurnPlayer={currentTurnPlayer}
       />
 
       {!gameComplete && !isMyTurn && (

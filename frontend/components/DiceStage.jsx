@@ -1,57 +1,66 @@
 'use client';
 
+import { useState, useEffect, useRef } from 'react';
+import dynamic from 'next/dynamic';
+import { useSettings } from '../lib/store';
+import { hueFor } from '../lib/tokens';
 import styles from './DiceStage.module.css';
 import { btnPrimary } from './ui.module.css';
 
-const PIP_LAYOUT = {
-  1: [4],
-  2: [0, 8],
-  3: [0, 4, 8],
-  4: [0, 2, 6, 8],
-  5: [0, 2, 4, 6, 8],
-  6: [0, 2, 3, 5, 6, 8],
-};
+const DiceCanvas = dynamic(() => import('./dice/DiceCanvas'), {
+  ssr: false,
+  loading: () => <div className={styles.canvasLoading}>Loading dice...</div>,
+});
 
-export default function DiceStage({ gameState, isMyTurn, kept, onToggleKeep, onRoll }) {
+export default function DiceStage({ gameState, isMyTurn, kept, onToggleKeep, onRoll, currentTurnPlayer }) {
+  const { reduceMotion } = useSettings();
+  const [pendingRoll, setPendingRoll] = useState(false);
+  const prevRollsLeft = useRef(gameState.rollsLeft);
+
   const canRoll = isMyTurn && gameState.rollsLeft > 0 && gameState.status === 'in_progress';
   const canKeep = isMyTurn && gameState.rollsLeft < 3 && gameState.rollsLeft > 0 && gameState.status === 'in_progress';
-  const diceRolled = !gameState.dice.every((d) => d === 0);
+  const hueColor = hueFor(currentTurnPlayer).main;
+
+  useEffect(() => {
+    if (gameState.rollsLeft !== prevRollsLeft.current) {
+      prevRollsLeft.current = gameState.rollsLeft;
+      setPendingRoll(false);
+    }
+  }, [gameState.rollsLeft]);
+
+  const handleRoll = () => {
+    setPendingRoll(true);
+    onRoll(kept);
+    setTimeout(() => setPendingRoll(false), 3000);
+  };
+
+  const rollLabel = pendingRoll
+    ? 'Rolling...'
+    : gameState.rollsLeft === 3
+      ? 'Roll Dice'
+      : `Roll (${gameState.rollsLeft} left)`;
 
   return (
     <div className={styles.stage}>
-      <div className={styles.diceRow}>
-        {gameState.dice.map((die, i) => {
-          const isKept = kept.includes(i);
-          const showFace = die !== 0;
-          return (
-            <button
-              key={i}
-              className={`${styles.die} ${isKept ? styles.dieKept : ''} ${!showFace ? styles.dieEmpty : ''} ${canKeep ? styles.dieInteractive : ''}`}
-              onClick={() => canKeep && onToggleKeep(i)}
-              disabled={!canKeep}
-              aria-label={`Die ${i + 1}: ${die || 'not rolled'}`}
-            >
-              {showFace ? <DieFace value={die} /> : <span className={styles.diePlaceholder}>?</span>}
-              {isKept && <span className={styles.keepBadge}>Lock</span>}
-            </button>
-          );
-        })}
+      <div className={styles.canvasContainer}>
+        <DiceCanvas
+          dice={gameState.dice}
+          rollsLeft={gameState.rollsLeft}
+          kept={kept}
+          canKeep={canKeep}
+          onToggleKeep={onToggleKeep}
+          reduceMotion={reduceMotion}
+          hueColor={hueColor}
+        />
       </div>
 
-      <button className={`${styles.rollBtn} ${btnPrimary}`} onClick={onRoll} disabled={!canRoll}>
-        {gameState.rollsLeft === 3 ? 'Roll Dice' : `Roll (${gameState.rollsLeft} left)`}
+      <button
+        className={`${styles.rollBtn} ${btnPrimary}`}
+        onClick={handleRoll}
+        disabled={!canRoll || pendingRoll}
+      >
+        {rollLabel}
       </button>
-    </div>
-  );
-}
-
-function DieFace({ value }) {
-  const pips = PIP_LAYOUT[value] || [];
-  return (
-    <div className={styles.dieFace}>
-      {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-        <span key={i} className={`${styles.pip} ${pips.includes(i) ? styles.pipOn : ''}`} />
-      ))}
     </div>
   );
 }
