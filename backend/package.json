@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "dependencies": {
+    "better-sqlite3": "^11.3.0",
     "ws": "^8.14.2"
   }
 }

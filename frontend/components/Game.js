@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
 const CATEGORIES = [
   { key: 'ones', label: 'Ones' },
@@ -18,70 +18,66 @@ const CATEGORIES = [
   { key: 'chance', label: 'Chance' },
 ];
 
-export default function Game() {
-  const [gameState, setGameState] = useState(null);
+export default function Game({ gameState, player, onRoll, onScore, onLeave, error }) {
   const [kept, setKept] = useState([]);
-  const ws = useRef(null);
 
   useEffect(() => {
-    const wsUrl = process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:3001';
-    ws.current = new WebSocket(wsUrl);
+    if (gameState && gameState.rollsLeft === 3) setKept([]);
+  }, [gameState?.rollsLeft]);
 
-    ws.current.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data.type === 'STATE') {
-        setGameState(data.state);
-      }
-    };
+  if (!gameState) return <div>Connecting...</div>;
 
-    return () => ws.current?.close();
-  }, []);
-
-  const send = (data) => {
-    if (ws.current?.readyState === WebSocket.OPEN) {
-      ws.current.send(JSON.stringify(data));
-    }
-  };
+  const myPlayer = gameState.players.find(p => p.playerId === player.id);
+  const isMyTurn = gameState.currentTurnPlayerId === player.id;
+  const opponents = gameState.players.filter(p => p.playerId !== player.id);
+  const gameComplete = gameState.status === 'completed';
+  const currentTurnName = gameState.players.find(p => p.playerId === gameState.currentTurnPlayerId)?.name;
+  const winnerName = gameState.players.find(p => p.playerId === gameState.winnerPlayerId)?.name;
 
   const rollDice = () => {
-    send({ type: 'ROLL', keep: kept });
+    onRoll(kept);
   };
 
   const scoreCategory = (category) => {
-    send({ type: 'SCORE', category });
+    onScore(category);
     setKept([]);
   };
 
   const toggleKeep = (index) => {
-    setKept(prev => 
+    setKept(prev =>
       prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
     );
   };
 
-  const newGame = () => {
-    send({ type: 'NEW_GAME' });
-    setKept([]);
-  };
-
-  if (!gameState) return <div>Connecting...</div>;
-
   return (
     <div style={{ padding: '20px' }}>
       <h1>Yatze Game</h1>
-      
+
+      {gameComplete ? (
+        <div style={{ margin: '10px 0', padding: '10px', border: '2px solid green' }}>
+          <h2 style={{ margin: 0 }}>Game Over!</h2>
+          <p>{winnerName === player.name ? 'You won!' : `Winner: ${winnerName || ''}`}</p>
+        </div>
+      ) : (
+        <p style={{ fontWeight: 'bold' }}>
+          {isMyTurn ? 'Your turn!' : `Waiting for ${currentTurnName}...`}
+        </p>
+      )}
+
       <div>
         <p>Rolls left: {gameState.rollsLeft}</p>
-        <p>Round: {gameState.currentRound}/13</p>
-        <p>Total Score: {gameState.totalScore}</p>
+        <p>Round: {gameState.round}/13</p>
+        <p>Total Score: {myPlayer?.totalScore ?? 0}</p>
       </div>
 
       <div style={{ margin: '20px 0' }}>
         {gameState.dice.map((die, i) => (
-          <button 
+          <button
             key={i}
             onClick={() => toggleKeep(i)}
-            style={{ 
-              margin: '5px', 
+            disabled={!isMyTurn || gameComplete || gameState.rollsLeft === 0}
+            style={{
+              margin: '5px',
               padding: '10px 20px',
               border: kept.includes(i) ? '2px solid blue' : '1px solid black'
             }}
@@ -91,34 +87,50 @@ export default function Game() {
         ))}
       </div>
 
-      <button 
-        onClick={rollDice} 
-        disabled={gameState.rollsLeft === 0}
+      <button
+        onClick={rollDice}
+        disabled={!isMyTurn || gameComplete || gameState.rollsLeft === 0}
         style={{ padding: '10px 20px', margin: '5px' }}
       >
         Roll Dice
       </button>
 
-      <h2>Score Categories</h2>
+      <h2>Your Scorecard</h2>
       <div>
         {CATEGORIES.map(cat => (
           <div key={cat.key} style={{ margin: '5px 0' }}>
-            <button 
+            <button
               onClick={() => scoreCategory(cat.key)}
-              disabled={gameState.scores[cat.key] !== undefined || gameState.rollsLeft === 3}
+              disabled={!isMyTurn || gameComplete || myPlayer?.scorecard[cat.key] !== undefined || gameState.rollsLeft === 3}
               style={{ padding: '5px 10px', width: '200px' }}
             >
               {cat.label}
             </button>
             <span style={{ marginLeft: '10px' }}>
-              {gameState.scores[cat.key] !== undefined ? gameState.scores[cat.key] : '-'}
+              {myPlayer?.scorecard[cat.key] !== undefined ? myPlayer.scorecard[cat.key] : '-'}
             </span>
           </div>
         ))}
       </div>
 
-      <button onClick={newGame} style={{ padding: '10px 20px', marginTop: '20px' }}>
-        New Game
+      {opponents.length > 0 && (
+        <div>
+          <h2>Opponents</h2>
+          {opponents.map(op => (
+            <div key={op.playerId} style={{ margin: '10px 0' }}>
+              <strong>{op.name}: {op.totalScore} points</strong>
+              <div style={{ fontSize: '12px', marginLeft: '20px', color: '#555' }}>
+                {CATEGORIES.map(c => op.scorecard[c.key] !== undefined ? `${c.label}: ${op.scorecard[c.key]}  ` : '').join('')}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+
+      <button onClick={onLeave} style={{ padding: '10px 20px', marginTop: '20px' }}>
+        Back to Lobby
       </button>
     </div>
   );

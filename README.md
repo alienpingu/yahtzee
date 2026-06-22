@@ -1,42 +1,52 @@
-## Setup Instructions
+# Yatze
 
-1. Create the project structure with all files above
-2. Run: `docker-compose up --build`
-3. Access the game at: http://localhost:3000
+A classic dice game with single-player and real-time multiplayer (2-4 players).
 
-## How to Play
+## Quick Start
 
-1. Click "Roll Dice" to roll all dice
-2. Click on dice to keep them (blue border)
-3. Roll again (up to 3 times total)
-4. Choose a scoring category
-5. Complete all 13 categories to finish the game
+```bash
+docker compose up --build
+```
+
+Open http://localhost:3000
+
+## Features
+
+- **Start screen** with Play, Rules, and About
+- **Single player** practice mode
+- **Multiplayer** with room codes (2-4 players, strict turn-based)
+- **Auto-save** — refresh or reconnect resumes your game
+- **SQLite** persistence (survives backend restarts)
 
 ## Architecture
 
-- **Backend**: Node.js WebSocket server (port 3001)
-  - Handles game logic
-  - Computes dice rolls and scores
-  - Manages game state
+Two containers, no external dependencies:
 
-- **Frontend**: Next.js app (port 3000)
-  - Minimal UI
-  - WebSocket client
-  - Real-time state display
+- **backend** (port 3001): Node.js WebSocket server
+  - Game engine (dice, scoring, turn rotation)
+  - In-memory game registry, broadcast to connected clients
+  - SQLite for persistence (`better-sqlite3`)
+  - Auto-reloads active games on restart
 
-## Scoring Categories
+- **frontend** (port 3000): Next.js app
+  - Start screen, lobby, game views
+  - WebSocket client with auto-reconnect
+  - localStorage for player identity and game resume
 
-- Ones through Sixes: Sum of matching dice
-- Three/Four of a Kind: Sum of all dice if condition met
-- Full House: 25 points
-- Small Straight: 30 points
-- Large Straight: 40 points
-- Yatze (5 of a kind): 50 points
-- Chance: Sum of all dice
+## How to Play
 
-## Development
+1. Click **Play**, enter your name
+2. Choose **Single player** or **Create multiplayer game** (share the 4-char code)
+3. Others join with the code; host clicks **Start**
+4. On your turn: roll dice (up to 3x), click dice to keep them
+5. Pick a scoring category to end your turn
+6. Complete all 13 categories — highest score wins
 
-Backend: `./backend`
-Frontend: `./frontend`
+## Scoring
 
-Both services run in Docker containers with auto-restart.
+- **Ones-Sixes**: Sum of matching dice
+- **Three/Four of a Kind**: Sum of all dice if condition met
+- **Full House**: 25 (3+2)
+- **Small/Large Straight**: 30/40 (4/5 consecutive)
+- **Yatze**: 50 (all 5 same)
+- **Chance**: Sum of all dice
