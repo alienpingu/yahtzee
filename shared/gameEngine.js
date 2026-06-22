@@ -4,10 +4,34 @@ export const CATEGORIES = [
   'largeStraight', 'yatze', 'chance',
 ];
 
+export const CATEGORY_META = {
+  ones: { label: 'Ones', section: 'upper' },
+  twos: { label: 'Twos', section: 'upper' },
+  threes: { label: 'Threes', section: 'upper' },
+  fours: { label: 'Fours', section: 'upper' },
+  fives: { label: 'Fives', section: 'upper' },
+  sixes: { label: 'Sixes', section: 'upper' },
+  threeOfKind: { label: 'Three of a Kind', section: 'lower' },
+  fourOfKind: { label: 'Four of a Kind', section: 'lower' },
+  fullHouse: { label: 'Full House', section: 'lower' },
+  smallStraight: { label: 'Small Straight', section: 'lower' },
+  largeStraight: { label: 'Large Straight', section: 'lower' },
+  yatze: { label: 'Yatze', section: 'lower' },
+  chance: { label: 'Chance', section: 'lower' },
+};
+
+export const PLAYER_HUES = [
+  { id: 'purple', name: 'Purple', main: '#7C3AED', soft: '#A78BFA' },
+  { id: 'teal', name: 'Teal', main: '#14B8A6', soft: '#5EEAD4' },
+  { id: 'pink', name: 'Pink', main: '#EC4899', soft: '#F9A8D4' },
+  { id: 'amber', name: 'Amber', main: '#F59E0B', soft: '#FCD34D' },
+];
+
 export class Game {
   constructor() {
     this.id = null;
     this.code = null;
+    this.mode = 'remote';
     this.status = 'waiting';
     this.hostPlayerId = null;
     this.currentTurnPlayerId = null;
@@ -19,10 +43,11 @@ export class Game {
     this.players = [];
   }
 
-  static create(id, code, hostPlayer) {
+  static create(id, code, hostPlayer, mode = 'remote') {
     const g = new Game();
     g.id = id;
     g.code = code;
+    g.mode = mode;
     g.hostPlayerId = hostPlayer.id;
     g.addPlayer(hostPlayer);
     return g;
@@ -37,6 +62,7 @@ export class Game {
       playerId: player.id,
       name: player.name,
       seat,
+      hue: player.hue || PLAYER_HUES[seat - 1]?.id || 'purple',
       scorecard: {},
       totalScore: 0,
     });
@@ -73,16 +99,20 @@ export class Game {
     if (p.scorecard[category] !== undefined) throw new Error('Category already scored');
 
     const points = calculateScore(category, this.dice);
+    const isYatzy = category === 'yatze' && points === 50;
     p.scorecard[category] = points;
     p.totalScore += points;
     this.rollsLeft = 3;
     this.dice = [0, 0, 0, 0, 0];
 
+    let completed = false;
     if (this.isComplete()) {
       this.complete();
+      completed = true;
     } else {
       this.rotateTurn();
     }
+    return { points, isYatzy, completed };
   }
 
   rotateTurn() {
@@ -112,10 +142,19 @@ export class Game {
     if (this.currentTurnPlayerId !== playerId) throw new Error('Not your turn');
   }
 
+  previewScore(playerId, category) {
+    const p = this.players.find((p) => p.playerId === playerId);
+    if (!p) return null;
+    if (p.scorecard[category] !== undefined) return p.scorecard[category];
+    if (this.dice.every((d) => d === 0)) return null;
+    return calculateScore(category, this.dice);
+  }
+
   toState() {
     return {
       id: this.id,
       code: this.code,
+      mode: this.mode,
       status: this.status,
       hostPlayerId: this.hostPlayerId,
       currentTurnPlayerId: this.currentTurnPlayerId,
@@ -127,6 +166,7 @@ export class Game {
         playerId: p.playerId,
         name: p.name,
         seat: p.seat,
+        hue: p.hue,
         scorecard: { ...p.scorecard },
         totalScore: p.totalScore,
       })),
@@ -144,7 +184,7 @@ export class Game {
   }
 }
 
-function calculateScore(category, dice) {
+export function calculateScore(category, dice) {
   const counts = dice.reduce((acc, val) => {
     acc[val] = (acc[val] || 0) + 1;
     return acc;

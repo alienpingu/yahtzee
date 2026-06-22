@@ -1,6 +1,6 @@
 import { WebSocketServer } from 'ws';
 import * as db from './db.js';
-import { Game } from './game.js';
+import { Game } from '../shared/gameEngine.js';
 
 const PORT = process.env.PORT || 3001;
 const wss = new WebSocketServer({ port: PORT });
