@@ -13,13 +13,13 @@ const DICE_SPACING = 1.15;
 
 const black = new THREE.Color(0x000000);
 
-export default function Die3D({ value, index, isKept, canKeep, onToggleKeep, reduceMotion, hueColor }) {
+export default function Die3D({ value, index, rollsLeft, isKept, canKeep, onToggleKeep, reduceMotion, hueColor }) {
   const meshRef = useRef();
   const animState = useRef('idle');
   const animStart = useRef(0);
   const angularVel = useRef(new THREE.Vector3());
   const startQuat = useRef(new THREE.Quaternion());
-  const prevValue = useRef(value);
+  const prevRollsLeft = useRef(rollsLeft);
   const [hovered, setHovered] = useState(false);
 
   const displayValue = value || 1;
@@ -44,16 +44,21 @@ export default function Die3D({ value, index, isKept, canKeep, onToggleKeep, red
   }, [materials]);
 
   useEffect(() => {
-    const oldValue = prevValue.current;
-    prevValue.current = value;
+    const oldRollsLeft = prevRollsLeft.current;
+    prevRollsLeft.current = rollsLeft;
 
+    // Fresh turn (dice cleared to 0) or no roll happened
     if (value === 0) {
       if (meshRef.current) meshRef.current.quaternion.copy(TARGET_QUATERNIONS[1]);
       animState.current = 'idle';
       return;
     }
 
-    if (value === oldValue || isKept) return;
+    // Only animate on actual roll events (rollsLeft decreased)
+    if (rollsLeft >= oldRollsLeft) return;
+
+    // Kept dice don't animate
+    if (isKept) return;
 
     if (reduceMotion) {
       if (meshRef.current) meshRef.current.quaternion.copy(TARGET_QUATERNIONS[value]);
@@ -68,7 +73,7 @@ export default function Die3D({ value, index, isKept, canKeep, onToggleKeep, red
       (Math.random() - 0.5) * 16 + (Math.random() > 0.5 ? 6 : -6),
       (Math.random() - 0.5) * 16 + (Math.random() > 0.5 ? 6 : -6)
     );
-  }, [value, isKept, reduceMotion]);
+  }, [value, rollsLeft, isKept, reduceMotion]);
 
   useFrame((_, delta) => {
     const mesh = meshRef.current;

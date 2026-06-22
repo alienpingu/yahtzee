@@ -44,6 +44,7 @@ export default function DiceCanvas({ dice, rollsLeft, kept, canKeep, onToggleKee
           key={i}
           value={value}
           index={i}
+          rollsLeft={rollsLeft}
           isKept={kept.includes(i)}
           canKeep={canKeep}
           onToggleKeep={onToggleKeep}
