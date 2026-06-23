@@ -1,11 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import GameTopBar from './GameTopBar';
 import PlayerTabBar from './PlayerTabBar';
 import ScorecardArea from './ScorecardArea';
 import DiceStage from './DiceStage';
 import PassDeviceGate from './PassDeviceGate';
+import CelebrationOverlay from './effects/CelebrationOverlay';
+import GameOverConfetti from './effects/GameOverConfetti';
+import { useSettings } from '../lib/store';
 import { useAutofocus } from '../lib/useAutofocus';
 import { useTurnPhase } from '../lib/useTurnPhase';
 import { hueFor } from '../lib/tokens';
@@ -18,6 +22,7 @@ export default function GameScreen({ gameState, player, mode, onRoll, onScore, o
   const isMyTurn = mode === 'hotseat' || gameState?.currentTurnPlayerId === player?.id;
   const turnPhase = useTurnPhase(gameState, isMyTurn);
   useAutofocus(gameState, mode);
+  const { reduceMotion } = useSettings();
 
   useEffect(() => {
     if (gameState && gameState.rollsLeft === 3) setKept([]);
@@ -81,9 +86,17 @@ export default function GameScreen({ gameState, player, mode, onRoll, onScore, o
 
       <PassDeviceGate gameState={gameState} />
 
+      <CelebrationOverlay />
+
       {gameComplete && (
         <div className={styles.gameOverOverlay}>
-          <div className={`${styles.gameOverCard} ${glassCard}`}>
+          {!reduceMotion && <GameOverConfetti />}
+          <motion.div
+            className={`${styles.gameOverCard} ${glassCard}`}
+            initial={{ scale: 0.85, y: 30, opacity: 0 }}
+            animate={{ scale: 1, y: 0, opacity: 1 }}
+            transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
+          >
             <span className={styles.gameOverEmoji}>🏆</span>
             <h2 className={`${styles.gameOverTitle} ${titleGradient}`}>Game Over!</h2>
             <p className={styles.gameOverWinner}>
@@ -99,7 +112,7 @@ export default function GameScreen({ gameState, player, mode, onRoll, onScore, o
               ))}
             </div>
             <button className={btnPrimary} onClick={onLeave}>Back to Lobby</button>
-          </div>
+          </motion.div>
         </div>
       )}
     </div>

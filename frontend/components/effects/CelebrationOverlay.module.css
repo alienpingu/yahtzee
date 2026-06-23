@@ -1,0 +1,97 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 11, 46, 0.7);
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.canvasLayer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.textLayer {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  pointer-events: none;
+}
+
+.textWrap {
+  transform-style: preserve-3d;
+}
+
+.yatzyText {
+  font-size: clamp(56px, 16vw, 120px);
+  font-weight: 700;
+  letter-spacing: -3px;
+  margin: 0;
+  line-height: 1;
+  background: linear-gradient(
+    90deg,
+    #FF0040 0%,
+    #FF6B00 16%,
+    #FFD500 33%,
+    #7CFC00 50%,
+    #00E5FF 66%,
+    #7C4DFF 83%,
+    #E040FB 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  text-shadow: 0 0 60px rgba(255, 255, 255, 0.15);
+  animation: shimmer 2s linear infinite;
+}
+
+@keyframes shimmer {
+  to { background-position: 200% center; }
+}
+
+.playerLine {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 20px 8px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #fff;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.scoredBy {
+  font-size: 16px;
+  color: #F5F3FF;
+}
+.scoredBy strong { font-weight: 700; }
+
+.emoji {
+  font-size: 20px;
+}
