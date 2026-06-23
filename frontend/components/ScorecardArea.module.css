@@ -2,10 +2,17 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 0 16px 200px;
+  padding: 0 16px 220px;
   max-width: 640px;
   margin: 0 auto;
   width: 100%;
+}
+
+@media (max-width: 480px) {
+  .area { padding: 0 12px 210px; }
+  .activeCard { padding: 16px; }
+  .catRow { padding: 8px 12px; }
+  .catLabel { font-size: 13px; }
 }
 
 .activeCard {

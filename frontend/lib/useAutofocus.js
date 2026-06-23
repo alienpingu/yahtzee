@@ -8,7 +8,7 @@ export function useAutofocus(gameState, mode) {
   const didInit = useRef(false);
 
   useEffect(() => {
-    if (!gameState || gameState.status === 'waiting') return;
+    if (!gameState || gameState.status === 'waiting' || gameState.status === 'completed') return;
 
     const turnId = gameState.currentTurnPlayerId;
 

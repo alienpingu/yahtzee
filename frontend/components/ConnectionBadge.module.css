@@ -1,0 +1,35 @@
+.badge {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(244, 63, 94, 0.15);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(244, 63, 94, 0.3);
+  z-index: 400;
+  animation: floatUp 250ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #F43F5E;
+  animation: pulseDot 1s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+.text {
+  font-size: 13px;
+  font-weight: 500;
+  color: #FDA4AF;
+}

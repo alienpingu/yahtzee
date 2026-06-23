@@ -23,11 +23,18 @@ export function GameProvider({ children }) {
   const [connected, setConnected] = useState(false);
   const [mode, setMode] = useState('remote');
 
+  useEffect(() => {
+    if (!error) return;
+    const timer = setTimeout(() => setError(''), 4000);
+    return () => clearTimeout(timer);
+  }, [error]);
+
   const wsRef = useRef(null);
   const playerNameRef = useRef(null);
   const pendingRef = useRef(null);
   const hotseatGameRef = useRef(null);
   const prevScorecardsRef = useRef({});
+  const gameIdRef = useRef(null);
 
   const setPlayerSync = useCallback((p) => {
     setPlayer(p);
@@ -69,9 +76,11 @@ export function GameProvider({ children }) {
   const applyState = useCallback((state, opts = {}) => {
     setGameState(state);
     if (state) {
+      gameIdRef.current = state.id;
       try { localStorage.setItem(GAME_ID_KEY, String(state.id)); } catch {}
       if (opts.detectYatzy !== false) detectYatzyEvent(state);
     } else {
+      gameIdRef.current = null;
       try { localStorage.removeItem(GAME_ID_KEY); } catch {}
       prevScorecardsRef.current = {};
     }
@@ -106,7 +115,7 @@ export function GameProvider({ children }) {
         switch (data.type) {
           case 'IDENTIFIED': {
             setPlayerSync(data.player);
-            const storedGameId = localStorage.getItem(GAME_ID_KEY);
+            const storedGameId = gameIdRef.current || localStorage.getItem(GAME_ID_KEY);
             if (storedGameId) {
               localStorage.removeItem(GAME_ID_KEY);
               ws.send(JSON.stringify({ type: 'REJOIN', gameId: Number(storedGameId) }));
@@ -256,11 +265,16 @@ export function GameProvider({ children }) {
       setMode('remote');
       applyState(null);
       useUiStore.getState().hidePassDevice();
+      useUiStore.getState().setActiveTab(null);
+      useUiStore.getState().clearYatzy();
       return;
     }
     send({ type: 'LEAVE' });
     applyState(null);
     setError('');
+    useUiStore.getState().hidePassDevice();
+    useUiStore.getState().setActiveTab(null);
+    useUiStore.getState().clearYatzy();
   }, [mode, send, applyState]);
 
   // ---- Mode-agnostic dispatch ----

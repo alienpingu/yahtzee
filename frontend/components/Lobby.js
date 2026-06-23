@@ -156,6 +156,7 @@ function HotseatSetup({ hsPlayers, setHsPlayers, onStart, onBack, error }) {
       <div className={styles.hsList}>
         {hsPlayers.map((p, i) => {
           const hue = PLAYER_HUES.find((h) => h.id === p.hue) || PLAYER_HUES[0];
+          const usedHues = hsPlayers.filter((_, idx) => idx !== i).map((pl) => pl.hue);
           return (
             <div key={i} className={`${styles.hsRow} ${glassCard}`}>
               <div className={styles.avatar} style={{ background: hue.main }}>
@@ -169,15 +170,19 @@ function HotseatSetup({ hsPlayers, setHsPlayers, onStart, onBack, error }) {
                 onChange={(e) => updatePlayer(i, 'name', e.target.value)}
               />
               <div className={styles.huePicker}>
-                {PLAYER_HUES.map((h) => (
-                  <button
-                    key={h.id}
-                    className={`${styles.hueSwatch} ${p.hue === h.id ? styles.hueSwatchActive : ''}`}
-                    style={{ background: h.main }}
-                    onClick={() => updatePlayer(i, 'hue', h.id)}
-                    aria-label={h.name}
-                  />
-                ))}
+                {PLAYER_HUES.map((h) => {
+                  const taken = usedHues.includes(h.id);
+                  return (
+                    <button
+                      key={h.id}
+                      className={`${styles.hueSwatch} ${p.hue === h.id ? styles.hueSwatchActive : ''} ${taken ? styles.hueSwatchTaken : ''}`}
+                      style={{ background: h.main }}
+                      onClick={() => !taken && updatePlayer(i, 'hue', h.id)}
+                      disabled={taken}
+                      aria-label={h.name}
+                    />
+                  );
+                })}
               </div>
               {hsPlayers.length > 2 && (
                 <button className={styles.removeBtn} onClick={() => removePlayer(i)} aria-label="Remove">✕</button>

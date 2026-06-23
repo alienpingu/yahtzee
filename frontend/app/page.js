@@ -7,6 +7,7 @@ import AboutScreen from '../components/AboutScreen';
 import Lobby from '../components/Lobby';
 import GameScreen from '../components/GameScreen';
 import { GameProvider, useGame } from '../lib/gameProvider';
+import ConnectionBadge from '../components/ConnectionBadge';
 
 function HomeInner() {
   const {
@@ -22,8 +23,9 @@ function HomeInner() {
     }
   }, [gameState?.status]);
 
+  let content;
   if (view === 'start') {
-    return (
+    content = (
       <StartScreen
         player={player}
         onPlay={() => setView('play')}
@@ -32,16 +34,16 @@ function HomeInner() {
         onIdentify={identify}
       />
     );
-  }
-  if (view === 'rules') return <RulesScreen onBack={() => setView('start')} />;
-  if (view === 'about') return <AboutScreen onBack={() => setView('start')} />;
-  if (view === 'play') {
-    if (mode === 'remote' && !player) { setView('start'); return null; }
-    if (mode === 'remote' && !connected) {
-      return <div style={{ padding: '20px' }}>Connecting to server...</div>;
-    }
-    if (gameState && (gameState.status === 'in_progress' || gameState.status === 'completed')) {
-      return (
+  } else if (view === 'rules') {
+    content = <RulesScreen onBack={() => setView('start')} />;
+  } else if (view === 'about') {
+    content = <AboutScreen onBack={() => setView('start')} />;
+  } else if (view === 'play') {
+    if (mode === 'remote' && !player) {
+      setView('start');
+      content = null;
+    } else if (gameState && (gameState.status === 'in_progress' || gameState.status === 'completed')) {
+      content = (
         <GameScreen
           gameState={gameState}
           player={player}
@@ -52,22 +54,29 @@ function HomeInner() {
           error={error}
         />
       );
+    } else {
+      content = (
+        <Lobby
+          player={player}
+          gameState={gameState}
+          error={error}
+          onSolo={solo}
+          onCreate={createGame}
+          onJoin={joinGame}
+          onStart={startGame}
+          onHotseat={startHotseat}
+          onLeave={leave}
+        />
+      );
     }
-    return (
-      <Lobby
-        player={player}
-        gameState={gameState}
-        error={error}
-        onSolo={solo}
-        onCreate={createGame}
-        onJoin={joinGame}
-        onStart={startGame}
-        onHotseat={startHotseat}
-        onLeave={leave}
-      />
-    );
   }
-  return null;
+
+  return (
+    <>
+      {content}
+      {mode === 'remote' && !connected && <ConnectionBadge />}
+    </>
+  );
 }
 
 export default function Home() {
