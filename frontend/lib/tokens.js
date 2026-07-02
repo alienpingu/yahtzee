@@ -1,22 +1,24 @@
 import { PLAYER_HUES } from '@shared/gameEngine';
 
 export const COLORS = {
-  bgDeep: '#0F0B2E',
-  bgMid: '#1A1240',
-  surface: 'rgba(255, 255, 255, 0.08)',
-  surfaceStrong: 'rgba(255, 255, 255, 0.14)',
-  border: 'rgba(255, 255, 255, 0.18)',
-  text: '#F5F3FF',
-  textMuted: '#B8B3D9',
-  textDim: '#7C7799',
-  danger: '#F43F5E',
-  success: '#34D399',
+  bgDeep: '#8B0D15',
+  bgMid: '#A6111D',
+  surface: 'rgba(247, 233, 208, 0.85)',
+  surfaceStrong: 'rgba(247, 233, 208, 0.95)',
+  border: 'rgba(139, 69, 19, 0.2)',
+  text: '#1A1A2E',
+  textMuted: '#6B4C3B',
+  textDim: '#9E8577',
+  danger: '#C91A29',
+  success: '#24B04B',
+  accent: '#FFC526',
+  cream: '#F7E9D0',
 };
 
 export const GRADIENT = {
-  primary: 'linear-gradient(135deg, #7C3AED 0%, #EC4899 50%, #F59E0B 100%)',
-  primarySoft: 'linear-gradient(135deg, #7C3AED 0%, #EC4899 100%)',
-  bg: 'radial-gradient(ellipse at top, #2A1B5E 0%, #0F0B2E 60%)',
+  primary: 'linear-gradient(135deg, #FFC526 0%, #FF9E00 100%)',
+  primarySoft: 'linear-gradient(135deg, #FFC526 0%, #FF9E00 100%)',
+  bg: 'radial-gradient(ellipse at top, #C91A29 0%, #8B0D15 60%)',
 };
 
 export const RADII = {
@@ -28,9 +30,9 @@ export const RADII = {
 };
 
 export const SHADOWS = {
-  soft: '0 4px 20px rgba(0, 0, 0, 0.35)',
-  glow: '0 0 24px rgba(124, 58, 237, 0.45)',
-  lifted: '0 12px 40px rgba(0, 0, 0, 0.5)',
+  soft: '0 4px 20px rgba(100, 20, 20, 0.25)',
+  glow: '0 0 24px rgba(255, 197, 38, 0.45)',
+  lifted: '0 12px 40px rgba(60, 10, 10, 0.4)',
 };
 
 export const SPACING = {

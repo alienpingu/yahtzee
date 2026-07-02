@@ -8,7 +8,7 @@
   align-items: center;
   gap: 10px;
   padding: 8px 16px calc(16px + env(safe-area-inset-bottom, 0px));
-  background: linear-gradient(to top, rgba(15, 11, 46, 0.98) 60%, rgba(15, 11, 46, 0.7) 85%, transparent);
+  background: linear-gradient(to top, rgba(139, 13, 21, 0.98) 60%, rgba(139, 13, 21, 0.7) 85%, transparent);
   z-index: 25;
 }
 
@@ -23,7 +23,7 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: #7C7799;
+  color: #E8A0A0;
   font-size: 14px;
 }
 

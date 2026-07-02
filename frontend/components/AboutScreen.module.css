@@ -14,10 +14,10 @@
 }
 
 .text {
-  color: #B8B3D9;
+  color: #6B4C3B;
   line-height: 1.7;
   font-size: 15px;
   margin-bottom: 16px;
 }
 .text:last-child { margin-bottom: 0; }
-.text strong { color: #F5F3FF; }
+.text strong { color: #1A1A2E; }

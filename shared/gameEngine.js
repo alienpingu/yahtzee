@@ -21,10 +21,10 @@ export const CATEGORY_META = {
 };
 
 export const PLAYER_HUES = [
-  { id: 'purple', name: 'Purple', main: '#7C3AED', soft: '#A78BFA' },
-  { id: 'teal', name: 'Teal', main: '#14B8A6', soft: '#5EEAD4' },
-  { id: 'pink', name: 'Pink', main: '#EC4899', soft: '#F9A8D4' },
-  { id: 'amber', name: 'Amber', main: '#F59E0B', soft: '#FCD34D' },
+  { id: 'purple', name: 'Blue', main: '#2A62C4', soft: '#5B8FE8' },
+  { id: 'teal', name: 'Green', main: '#24B04B', soft: '#6FD88E' },
+  { id: 'pink', name: 'Crimson', main: '#C91A29', soft: '#E85D6A' },
+  { id: 'amber', name: 'Gold', main: '#FFC526', soft: '#FFDF7A' },
 ];
 
 export class Game {

@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(15, 11, 46, 0.7);
+  background: rgba(139, 13, 21, 0.85);
   backdrop-filter: blur(4px);
   cursor: pointer;
   overflow: hidden;
@@ -68,9 +68,9 @@
   gap: 12px;
   padding: 8px 20px 8px 8px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(247, 233, 208, 0.9);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(139, 69, 19, 0.15);
 }
 
 .avatar {
@@ -88,7 +88,7 @@
 
 .scoredBy {
   font-size: 16px;
-  color: #F5F3FF;
+  color: #1A1A2E;
 }
 .scoredBy strong { font-weight: 700; }
 

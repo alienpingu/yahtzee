@@ -19,18 +19,18 @@
 }
 
 .subtitle {
-  color: #B8B3D9;
+  color: #FFD6D6;
   font-size: 18px;
   margin-top: 8px;
   font-weight: 400;
 }
 
 .welcome {
-  color: #B8B3D9;
+  color: #FFD6D6;
   font-size: 18px;
   margin-bottom: 24px;
 }
-.welcome strong { color: #F5F3FF; }
+.welcome strong { color: #FFF8E7; }
 
 .nameRow {
   padding: 8px;
